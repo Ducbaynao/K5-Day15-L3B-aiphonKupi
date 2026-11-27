@@ -29,9 +29,24 @@
 | So sánh: review 1–3★ có nhãn spam gốc | 99 / 802 | 12,3% | 5★ gấp ~2,2 lần |
 | Review 5★ trên tổng số review | 18.543 / 19.870 | 93,3% | Phân bố sao lệch về 5★ trong dataset; chưa đo khả năng phân biệt giữa các sản phẩm |
 
-**Kết luận:** trong dataset này, 27,2% review 5★ có nhãn spam gốc; tỷ lệ này cao khoảng 2,2 lần nhóm 1–3★. Đây chưa phải tỷ lệ review thiếu thông tin chất lượng theo định nghĩa của nhóm và không phải cận dưới đã được chứng minh. Vì cách đo khác nhau, chưa thể dùng số này để xác nhận hay bác bỏ giả thuyết CP1 (≥40%). Ví dụ 4 và 5 cho thấy độ lệch giữa hai cách gán nhãn theo cả hai hướng; cần gán lại một mẫu theo quy tắc của nhóm để đo đúng giả thuyết.
+**Kết luận bước 1 (nhãn spam gốc):** trong dataset này, 27,2% review 5★ có nhãn spam gốc; tỷ lệ này cao khoảng 2,2 lần nhóm 1–3★. Vì nhãn gốc không đồng nhất với 4 nhãn của nhóm (ví dụ 4 và 5 cho thấy độ lệch theo cả hai hướng), nhóm thực hiện thêm bước gán lại mẫu 50 review bên dưới để kiểm chứng giả thuyết CP1 (≥40%).
 
-**Tái lập:** người chạy đã cung cấp đầu ra lệnh `python evidence/count_vispam.py data/raw/dataset`: 19.870 review, 18.543 review 5★; số lượng nhãn 0/1/2/3 lần lượt là 13.491/274/1.440/3.338. Chỉ làm rõ cách diễn giải, giữ nguyên số đếm.
+**Tái lập:** chạy `python evidence/count_vispam.py data/raw/dataset`: 19.870 review, 18.543 review 5★; số lượng nhãn 0/1/2/3 lần lượt là 13.491/274/1.440/3.338.
+
+## 3b. Gán lại mẫu 50 review 5★ theo 4 nhãn của nhóm (`evidence/sample50.py`)
+
+- **Cách lấy mẫu:** Lấy ngẫu nhiên 50 review 5★ trong `test.csv` bằng `random.Random(42).sample(...)` (trên bản ViSpamReviews v2 có `product_name` đi kèm để nhận diện `san_pham_khac`). Gán nhãn theo đúng quy tắc 4 nhãn trong `codebase/agent.py`.
+- **Kết quả (`python evidence/sample50.py`):**
+
+| Nhãn của nhóm | x / 50 | % | Ghi chú |
+|---|---|---|---|
+| **Thiếu thông tin chất lượng** (`≠ chat_luong`) | **30 / 50** | **60,0%** | **Vượt ngưỡng giả thuyết ≥40%** |
+| · `khong_thong_tin` | 23 / 50 | 46,0% | Khen chung chung, chưa dùng, ký tự vô nghĩa, quảng cáo |
+| · `van_chuyen` | 5 / 50 | 10,0% | Chỉ nói giá, giao hàng, nạp nhanh |
+| · `san_pham_khac` | 2 / 50 | 4,0% | Dòng 1843 (thẻ Vina khen mùi thơm), dòng 3533 (Hộp đựng giày nhưng review giày đế cao) |
+| Có thông tin chất lượng (`chat_luong`) | 20 / 50 | 40,0% | Có ≥1 chi tiết cụ thể về sản phẩm |
+
+- **Đối chiếu nhãn gốc trong cùng 50 mẫu:** `SpamLabel ≠ 0` chỉ bắt được **12/50 (24,0%)** — **bỏ sót 19 review** được gắn bình thường (`0`) nhưng thực tế chỉ khen chung chung / giao hàng / sai sản phẩm, và có 1 review nhãn `1` nhưng vẫn nêu chi tiết sử dụng (`dòng 3343`: dùng cho remote cửa cuốn cửa xếp). Điều này giải thích vì sao tỷ lệ 27,2% của nhãn spam gốc thấp hơn nhiều so với tỷ lệ thiếu thông tin chất lượng thực tế (60,0%).
 
 ## 4. ≥5 ví dụ cụ thể (dòng trong `test.csv`, không có tên người viết trong dataset)
 
@@ -47,4 +62,4 @@
 - Nhãn là của nhóm tác giả, không phải của nhóm mình; ví dụ 4 và 5 cho thấy định nghĩa lệch nhau.
 - Data cho biết review **trông thế nào**, không cho biết người mua **có bị ảnh hưởng không**.
 
-→ Kiểm lại bằng: (1) nhóm tự gán lại ~50 review theo 4 nhãn của mình, so độ khớp với nhãn gốc; (2) khảo sát ≥20 người mua trong lớp: có đọc review không, từng mua phải hàng khác hẳn review 5★ không.
+→ Kiểm lại bằng khảo sát ≥20 người mua ngoài nhóm (`evidence/survey/`): có đọc review không, từng mua phải hàng khác hẳn review 5★ không.

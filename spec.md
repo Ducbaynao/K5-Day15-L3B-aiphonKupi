@@ -15,7 +15,9 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không (tr
 - Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
 - Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
 - Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/data-mining.md`): **5.052/18.543 review 5★ (27,2%) có SpamLabel ≠ 0 theo nhãn gốc ViSpamReviews**, so với 99/802 (12,3%) ở review 1–3★. Phép đếm đã được người chạy tái lập. Nhãn spam gốc chưa đồng nhất với thiếu thông tin chất lượng theo quy tắc của nhóm; cần gán lại mẫu để kiểm giả thuyết CP1. Khảo sát lớp đang làm.
+- Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`, `evidence/data-mining.md`, `evidence/survey/`):
+  - **Đào data (ViSpamReviews):** **5.052/18.543 review 5★ (27,2%)** có `SpamLabel ≠ 0`, gấp ~2,2 lần nhóm 1–3★ (99/802 = 12,3%). Khi gán lại mẫu ngẫu nhiên 50 review 5★ theo đúng 4 nhãn của nhóm (`evidence/sample50.py`), **30/50 (60,0%)** thiếu thông tin chất lượng — xác nhận giả thuyết `≥40%`.
+  - **Khảo sát (`n = 24` người mua ngoài nhóm, chốt 17:45 27/11):** **21/24 (87,5%)** đọc review trước khi đặt đơn ≥200k; **14/24 (58,3%)** gặp review 5★ rỗng "rất thường xuyên" (tổng 21/24 = 87,5% gặp thường xuyên/thỉnh thoảng); **21/24 (87,5%)** từng mua nhầm hàng kém dù điểm 4.8★–5.0★; **14/24 (58,3%)** ngại đổi trả đành mất tiền oan.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
