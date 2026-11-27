@@ -11,10 +11,10 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | Phạm Lý Ngọc Đức | 2A202603991 | Đội trưởng | Chưa phân công |
-| 2 | Nguyễn Huy Tấn | 2A202603925 | Thành viên | Chưa phân công |
-| 3 | Nguyễn Anh Quân | 2A202603892 | Thành viên | Chưa phân công |
-| 4 | Nguyễn Minh Triết | 2A202603995 | Thành viên | Chưa phân công |
+| 1 | Phạm Lý Ngọc Đức | 2A202603991 | Đội trưởng | Canvas, spec, bảng impact, giữ mạch câu chuyện |
+| 2 | Nguyễn Huy Tấn | 2A202603925 | Thành viên | Khảo sát ≥20 người và phỏng vấn người mua |
+| 3 | Nguyễn Anh Quân | 2A202603892 | Thành viên | Chép và gán nhãn review, script đếm bằng chứng |
+| 4 | Nguyễn Minh Triết | 2A202603995 | Thành viên | Bản chạy thử (LLM gán nhãn + code tính điểm), data card |
 
 **Quy tắc điền**
 - **Lớp:** `L3A` hoặc `L3B`. **Track:** một chữ `A` (EdTech), `B` (Y tế), `C` (Du lịch), `D` (Thương mại điện tử), `E` (Tài chính) hoặc `F` (Làn khác). **Link repo:** link GitHub công khai của nhóm.
