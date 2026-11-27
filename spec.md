@@ -15,7 +15,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không (tr
 - Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
 - Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
 - Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/data-mining.md`): **5.052/18.543 review 5★ (27,2%) không cho thông tin về sản phẩm** (ViSpamReviews), so với 12,3% ở review 1–3★. Khảo sát lớp đang làm.
+- Bằng chứng — số chính + kết luận (chi tiết: `evidence/data-mining.md`): **5.052/18.543 review 5★ (27,2%) có SpamLabel ≠ 0 theo nhãn gốc ViSpamReviews**, so với 99/802 (12,3%) ở review 1–3★. Phép đếm đã được người chạy tái lập. Nhãn spam gốc chưa đồng nhất với thiếu thông tin chất lượng theo quy tắc của nhóm; cần gán lại mẫu để kiểm giả thuyết CP1. Khảo sát lớp đang làm.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
@@ -121,7 +121,7 @@ flowchart LR
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 27/11/2026 — rà soát bản CP2 | Làm rõ 27,2% là tỷ lệ nhãn spam gốc; giữ nguyên số đếm. Làm rõ ưu tiên nhãn khen chung chung kết hợp lời khen dịch vụ chung chung trong prompt | Nhãn gốc lệch định nghĩa của nhóm (ví dụ 4–5 trong evidence/data-mining.md); quy tắc prompt mâu thuẫn với R05. Giữ nguyên benchmark, metric và chuẩn đạt §7 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
