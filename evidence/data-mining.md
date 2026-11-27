@@ -1,40 +1,48 @@
 # Đào data — cách đếm và kết quả
 
-> Điền ở guide bước 1.2. Ôn lại: ngày 2, ngày 6 · lab ngày 2, lab ngày 6.
-> Không đào data thì xoá file này. Script / công thức đếm để trong repo (vd `evidence/count.py` hoặc ghi công thức Sheets ngay dưới), người khác chạy lại phải ra cùng số.
-> Repo chỉ chứa số đã tổng hợp và vài dòng ví dụ — không chép lại nguyên file data.
+> Repo chỉ chứa số đã tổng hợp và vài dòng ví dụ — không chép lại nguyên dataset.
 
 ## 1. Cách đếm — viết TRƯỚC khi chạy
 
-- Data dùng: __ (file nào, từ ngày nào đến ngày nào)
-- Đếm gì: __ · trên tập nào: __ · lọc gì: __
-- **Mẫu số là gì:** __ *(lỗi hay gặp nhất là mẫu số sai)*
-- Script / công thức: __
+- **Data dùng:** ViSpamReviews v1 (Van Dinh, Luu & Nguyen, 2022 — [arXiv 2207.14636](https://arxiv.org/abs/2207.14636)), review thật của người mua trên sàn TMĐT Việt Nam, do nhóm tác giả UIT gán nhãn. Tải từ https://github.com/sonlam1102/vispamdetection (`dataset/vispamdetection_dataset.zip`), xem 27/11/2026. Dataset dùng cho nghiên cứu → **không commit vào repo**.
+- **Đếm gì:** số review 5★ **không cho người mua thông tin về sản phẩm** · trên cả 3 file train + dev + test · lọc `Rating = 5`.
+- **"Không cho thông tin" =** `SpamLabel ≠ 0` theo nhãn gốc của nhóm tác giả: 1 = review giả (khen theo mẫu) · 2 = chỉ nói shop / giao hàng / giá · 3 = không liên quan, vô nghĩa. Nhóm **không tự gán lại** ở bước này.
+- **Mẫu số:** toàn bộ review 5★ (N = 18.543). So sánh thêm với review 1–4★.
+- **Script:** `evidence/count_vispam.py` — chạy `python evidence/count_vispam.py <thư mục dataset>` ra đúng các số dưới.
 
 ## 2. Đọc trước, đếm sau
 
-Đã đọc __ dòng đầu và từ điển cột. Các *kiểu* hành vi thấy được (trước khi định nghĩa thứ cần đếm):
-- __
-- __
+Đã đọc ~100 dòng đầu file test và mô tả nhãn trong bài báo. Các kiểu review thấy được:
+- Khen theo mẫu gần như giống hệt nhau giữa nhiều review ("Chất lượng sản phẩm tuyệt vời. Đóng gói… Giao hàng nhanh.").
+- Chỉ nói giao hàng / đóng gói / shipper, có khi ghi thẳng "chưa sử dụng".
+- Ký tự vô nghĩa, kéo dài chữ ("Okkkk…", "Nhanhhhh…") — đủ độ dài để nhận xu.
+- Khen chung chung "Khá ok. Hài lòng" — nhãn gốc là bình thường (0) nhưng không có chi tiết nào về sản phẩm.
 
 ## 3. Kết quả
 
 | Đếm gì | x / N | % | Ghi chú |
 |---|---|---|---|
-| | | | |
-| | | | |
+| Review 5★ không cho thông tin về sản phẩm (`SpamLabel ≠ 0`) | 5.052 / 18.543 | 27,2% | Số chính |
+| · trong đó vô nghĩa / không liên quan (3) | 3.338 / 18.543 | 18,0% | |
+| · chỉ nói shop / giao hàng / giá (2) | 1.440 / 18.543 | 7,8% | |
+| · khen theo mẫu (1) | 274 / 18.543 | 1,5% | |
+| So sánh: review 1–3★ không cho thông tin | 99 / 802 | 12,3% | 5★ gấp ~2,2 lần |
+| Review 5★ trên tổng số review | 18.543 / 19.870 | 93,3% | Gần như mọi review đều 5★ → số sao trung bình gần như không phân biệt được sản phẩm |
 
-Ghi dạng "x/N (y%)". "Nhiều bạn…" không phải số.
+**Kết luận:** cứ khoảng 1/4 review 5★ không giúp người mua đánh giá sản phẩm, và review 5★ "rỗng" nhiều gấp đôi review sao thấp. Số này **thấp hơn giả thuyết CP1 (≥40%)**. Đây là cận dưới: định nghĩa "bình thường" của nhóm tác giả rộng hơn định nghĩa của nhóm (vd "Khá ok. Hài lòng" vẫn tính là bình thường).
 
-## 4. ≥5 ví dụ cụ thể (mã dòng / mã đã ẩn danh, không đoán ai là ai)
+## 4. ≥5 ví dụ cụ thể (dòng trong `test.csv`, không có tên người viết trong dataset)
 
-1.
-2.
-3.
-4.
-5.
+1. Dòng 1665 · 5★ · nhãn 1: "Chất lượng sản phẩm tuyệt vời. Đóng gói sản phẩm chắc chắc." — cùng mẫu với dòng 3483, 1302, 1564.
+2. Dòng 422 · 5★ · nhãn 3: "Nhanhhhhhhhh…" (kéo dài ~50 ký tự).
+3. Dòng 3243 · 5★ · nhãn 2: "…chưa sử dụnh nên k biết chất lượng như thế nào".
+4. Dòng 2855 · 5★ · nhãn 0: "Khá ok. Hài lòng" — nhãn gốc bình thường nhưng không có chi tiết sản phẩm.
+5. Dòng 3260 · 5★ · nhãn 2: "hình ảnh đánh giá nhận xu thôi ạ nhưng đi 37 đặt 36 vẫn rộng quá" — nhãn gốc "chỉ nói shop" nhưng thực ra có thông tin size quan trọng.
 
 ## 5. Giới hạn của data
 
-Data cho biết người ta **làm gì**, không cho biết **vì sao**. Thiếu gì, lệch về phía nào: __
-→ Kiểm lại bằng phỏng vấn / khảo sát nào: __
+- Thu thập khoảng 2021–2022, chủ yếu Shopee / Tiki; chưa có TikTok Shop. Bộ v1 không có tên sản phẩm.
+- Nhãn là của nhóm tác giả, không phải của nhóm mình; ví dụ 4 và 5 cho thấy định nghĩa lệch nhau.
+- Data cho biết review **trông thế nào**, không cho biết người mua **có bị ảnh hưởng không**.
+
+→ Kiểm lại bằng: (1) nhóm tự gán lại ~50 review theo 4 nhãn của mình, so độ khớp với nhãn gốc; (2) khảo sát ≥20 người mua trong lớp: có đọc review không, từng mua phải hàng khác hẳn review 5★ không.
