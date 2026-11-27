@@ -27,14 +27,17 @@ def main(folder):
     for name in ("train.csv", "dev.csv", "test.csv"):
         with open(os.path.join(folder, name), encoding="utf-8") as f:
             rows += list(csv.DictReader(f))
-    five = [r for r in rows if r["Rating"].strip() == "5"]
-    c = Counter(r["SpamLabel"] for r in five)
+    five = [r for r in rows if (r.get("Rating") or r.get("rating", "")).strip() == "5"]
+    c = Counter(r["SpamLabel"] if "SpamLabel" in r else r["spam_label"] for r in five)
     spam = sum(v for k, v in c.items() if k != "0")
     print("Tổng review: %d · review 5★: %d" % (len(rows), len(five)))
     print("Review 5★ có nhãn spam gốc (SpamLabel != 0): %d/%d = %.1f%%" % (spam, len(five), 100 * spam / len(five)))
     for k in sorted(c):
         print("  SpamLabel %s (%s): %d (%.1f%%)" % (k, NAMES.get(k, "?"), c[k], 100 * c[k] / len(five)))
-    by_star = Counter((r["Rating"].strip(), r["SpamLabel"] != "0") for r in rows)
+    by_star = Counter(
+        ((r.get("Rating") or r.get("rating", "")).strip(), (r["SpamLabel"] if "SpamLabel" in r else r["spam_label"]) != "0")
+        for r in rows
+    )
     print("Tỉ lệ spam theo số sao:")
     for s in "12345":
         n = by_star[(s, True)] + by_star[(s, False)]
