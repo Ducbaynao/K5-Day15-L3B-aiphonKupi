@@ -52,14 +52,28 @@ def _parse_json(s: str) -> dict:
     return json.loads(m.group(0))
 
 
+def _detail_reviews(reviews: list, labels: list, dup: dict) -> list:
+    """Dữ liệu có cấu trúc cho giao diện web (codebase/web.py). Không ảnh hưởng chuỗi output mà eval chấm."""
+    by_label = {x["id"]: x for x in labels}
+    rows = []
+    for r in reviews:
+        x = by_label.get(r["id"], {})
+        rows.append({"id": r["id"], "stars": r["stars"], "text": r["text"],
+                     "label": x.get("label"), "sentiment": x.get("sentiment"),
+                     "quote": x.get("quote", ""), "quote_ok": bool(x.get("quote")),
+                     "duplicate_of": dup.get(r["id"])})
+    return rows
+
+
 def answer(text: str) -> dict:
     notes = _scope_notes(text)
     data = parse_reviews(text)
     reviews = data["reviews"]
     if not reviews:
         note("dừng: không có review")
-        msg = notes + ["Bạn dán giúp danh sách review theo dạng: Sản phẩm: <tên> || [1] 5★ <review> [2] 4★ <review> ..."]
-        return {"output": "\n".join(msg)}
+        ask = "Bạn dán giúp danh sách review theo dạng: Sản phẩm: <tên> || [1] 5★ <review> [2] 4★ <review> ..."
+        return {"output": "\n".join(notes + [ask]),
+                "detail": {"product": data["product"], "notes": notes, "ask": ask, "reviews": []}}
 
     dup = find_duplicates(reviews)
     lines = ["[%d] %s★ %s" % (r["id"], r["stars"] or "?", r["text"]) for r in reviews]
@@ -70,7 +84,9 @@ def answer(text: str) -> dict:
         raw = _parse_json(reply["text"]).get("labels", [])
     except (ValueError, json.JSONDecodeError) as e:
         note("dừng: %s" % e)
-        return {"output": "Lỗi: không đọc được kết quả gán nhãn, vui lòng thử lại."}
+        msg = "Lỗi: không đọc được kết quả gán nhãn, vui lòng thử lại."
+        return {"output": msg, "detail": {"product": data["product"], "notes": notes, "error": msg,
+                                          "reviews": _detail_reviews(reviews, [], dup)}}
 
     by_id = {r["id"]: r for r in reviews}
     labels, bad_quotes = [], 0
@@ -110,4 +126,7 @@ def answer(text: str) -> dict:
     quotes = [x for x in labels if x["label"] == "chat_luong" and x["quote"] and x["id"] not in dup][:3]
     for x in quotes:
         out.append('  [%d] (%s) "%s"' % (x["id"], x["sentiment"] or "?", x["quote"]))
-    return {"output": "\n".join(out)}
+    detail = {"product": data["product"], "notes": notes, "reviews": _detail_reviews(reviews, labels, dup),
+              "counts": c, "informative": s["informative"], "positive": s["positive"],
+              "negative": s["negative"], "enough": s["enough"]}
+    return {"output": "\n".join(out), "detail": detail}
