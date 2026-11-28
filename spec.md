@@ -115,9 +115,9 @@ flowchart LR
 - **Cách chấm và giới hạn:** AI hỗ trợ đối chiếu nhãn/điểm, kiểm trích dẫn và đọc hành vi; chỉ điền pass/ghi_chu. 67/67 trích dẫn khớp review sau chuẩn hoá. Chưa có người thứ hai chấm độc lập hoặc tổng hợp đủ bốn metric, nên tỷ lệ tổng ≥80% chưa tự xác nhận toàn bộ chuẩn đạt. Benchmark đã được dùng khi thiết kế prompt, không phải tập kiểm thử độc lập hoàn toàn.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt **simulate-1@20261128-103718**, `cost/simulate-1.csv`, summary và trace tương ứng. **50/50 phiên, 0 lỗi**, seed 42; ít/vừa/nhiều 18/17/15 phiên, mỗi phiên một lượt; 45 lần gọi model, 30.934 token vào / 17.057 ra.
-- Chi phí/task thành công: **$0,00024** (gpt-6-luna), **$0,0048** (quy đổi giá gpt-6.2-sol trên token Luna, chưa đo Sol thật). Rate **28/29** từ `run-1@20261128-085253`, phù hợp prompt đã khôi phục. Công thức chi phí/phiên chia rate benchmark; chưa chấm riêng 50 output mô phỏng.
-- Chi phí/tháng của kịch bản tự ước tính thấp/cơ sở/cao **6/12/24** người: Luna **$0,0049 / $0,0098 / $0,0197**; Sol quy đổi **$0,0983 / $0,1966 / $0,3933**. Luna cơ sở **$0,00082/người/tháng**. Chi tiết và nguồn giá trong `cost/cost-estimate.md`.
+- Persona + giá: `cost/personas.yaml` · số báo cáo CP4 lấy từ **simulate-2@20261128-110412**, `cost/simulate-2.csv`, summary và trace tương ứng. **50/50 phiên, 0 lỗi**, seed 42; ít/vừa/nhiều 18/17/15 phiên, mỗi phiên một lượt; 45 lần gọi model, **37.819 token vào / 15.961 ra**.
+- Chi phí/task thành công: **$0,00025** (gpt-6-luna), **$0,0051** (quy đổi giá gpt-6.2-sol trên token Luna, chưa đo Sol thật). Rate **27/29** từ `run-2@20261128-102256`; prompt lượt 2 nạp riêng từ `eval/prompts/run-2-system.txt` để đo cùng cấu hình. Không đổi prompt đang dùng trong agent.py. Công thức chi phí/phiên chia rate benchmark; chưa chấm riêng 50 output mô phỏng.
+- Chi phí/tháng của kịch bản tự ước tính thấp/cơ sở/cao **6/12/24** người: Luna **$0,0049 / $0,0097 / $0,0194**; Sol quy đổi **$0,0971 / $0,1942 / $0,3884**. Luna cơ sở **$0,00081/người/tháng**. Giữ simulate-1 làm lịch sử cho prompt/rate lượt 1; chi tiết và nguồn giá trong `cost/cost-estimate.md`.
 - So với impact: §2 giả định 3 phút/người/tháng; cơ cấu persona mô phỏng tương đương 3,48 phiên/người/tháng, nếu tiết kiệm 1 phút/phiên thì 3,48 phút (chưa đo). Token rẻ trong kịch bản nhỏ nhưng chưa đủ kết luận hiệu quả thương mại, chưa tính hosting/công người hoặc chứng minh lợi ích thật.
 
 ## §9. Rủi ro & an toàn
@@ -141,6 +141,7 @@ flowchart LR
 | 28/11/2026 — đánh giá và không giữ prompt thử nghiệm | Chạy/chấm lượt 2: 27/29 so với 28/29 lượt 1; lưu prompt tại eval/prompts/run-2-system.txt và khôi phục agent.py về bản lượt 1 | R16 vẫn không đạt, R17 phát sinh lỗi điểm. Giữ nguyên cả hai lượt, chỉ điền pass/ghi_chu cho lượt 2; báo cả cải thiện cục bộ và hồi quy, không kết luận cải tiến thành công |
 | 28/11/2026 — cấu hình mô phỏng chi phí | Thay persona mẫu bằng ba nhóm khảo sát, 50 phiên, tần suất 1/4/6 và một lượt/phiên; quy mô tự ước tính 6/12/24; thêm giá Standard Luna/Sol có nguồn | Chỉ chuẩn bị cấu hình, chưa chạy mô phỏng. Dùng cả ba type để cùng phạm vi benchmark và lấy tỉ lệ đạt từ run-1 cho prompt đang dùng. Giá Sol chỉ quy đổi trên token Luna, chưa chứng minh chất lượng Sol |
 | 28/11/2026 — ghi kết quả chi phí | Đối chiếu simulate-1@20261128-103718: 50 phiên, 0 lỗi; cập nhật §8 và cost/cost-estimate.md | Tái tính từ CSV khớp summary; dùng rate run-1, không dùng lượt thử hoặc rate run-2. Giữ nguyên CSV, summary, trace mô phỏng đã chạy |
+| 28/11/2026 — bổ sung số chi phí theo lượt 2 cho form CP4 | Đối chiếu simulate-2@20261128-110412: 50 phiên/0 lỗi, đúng prompt thử nghiệm và rate 27/29; cập nhật §8, cost/cost-estimate.md và data card | Theo yêu cầu form dùng rate run-2; Luna khoảng $0,00025/task, $0,0097/tháng cơ sở. Giữ nguyên simulate-1, simulate-2 và trace; không đổi prompt đang dùng hoặc chuẩn đạt |
 
 **Phần chưa xong CP3:** phòng/zone chưa có trong repo; chưa tái lập mẫu 50 trên đúng v2; chưa xác minh đối thủ; impact chưa đo trước/sau; chưa chấm độc lập và tổng hợp đủ bốn metric. §8 chi phí và lượt 2 làm tiếp cho CP4.
 

@@ -68,3 +68,11 @@ Kiểm bằng `python run.py check`. Giữ nguyên metric/chuẩn đạt CP2; kh
 - **Sai khác lượt 1:** R16 không đạt; R07 và R18 khác expected nhưng vẫn đạt pass_criterion, đã ghi trong ghi_chu. Chi tiết `eval/report.md`; chưa tổng hợp đủ bốn metric.
 - **Lượt 2 (CP4):** `run-2@20261128-102256`, model gpt-6-luna, 0 lỗi kỹ thuật; 27/29 đạt (93,1%), R16/R17 không đạt; token 22.681 vào / 9.356 ra. Chỉ điền pass/ghi_chu. Prompt thử nghiệm lưu ở `eval/prompts/run-2-system.txt`; kết quả giảm nên đã khôi phục prompt đang dùng về bản lượt 1. Giữ nguyên cả hai lượt và trace tương ứng.
 - **Bảo toàn:** không sửa input, expected, output, token, run ID hoặc trace đã chạy; chỉ điền pass/ghi_chu. Chạy lại tạo lượt mới. Không lưu key trong kết quả hoặc quay .env trong video.
+
+## 6. Dữ liệu mô phỏng chi phí CP4
+
+- **simulate-1@20261128-103718:** 50 phiên/0 lỗi, đo prompt đang dùng của lượt 1, rate 28/29; giữ CSV, summary và trace làm lịch sử.
+- **simulate-2@20261128-110412 — dùng báo cáo form CP4:** 50 phiên/0 lỗi, một lượt/phiên, seed 42, 45 lần gọi OpenAI gpt-6-luna; 37.819 token vào / 15.961 ra. Dùng đúng prompt thử nghiệm `eval/prompts/run-2-system.txt` trong tiến trình riêng và rate 27/29 của lượt 2; không thay agent.py đang dùng.
+- Nguồn: `cost/simulate-2.csv`, `cost/simulate-2-summary.md`, `traces/simulate-2.jsonl`. Các phiên lấy mẫu có lặp từ benchmark, không phải 50 người dùng thật hoặc 50 tình huống độc lập mới. Năm phiên không gọi model có token 0, không phải lỗi.
+- Luna khoảng $0,00025/task thành công và $0,0097/tháng cho cơ sở giả định 12 người; Sol chỉ quy đổi giá trên token Luna. Chưa chấm riêng 50 output mô phỏng; tỷ lệ thành công lấy từ benchmark. Chi tiết giả định, nguồn giá và giới hạn ở `cost/cost-estimate.md`.
+- Không sửa CSV, summary hoặc trace đã sinh, không gộp hai lượt thành một mẫu 100 phiên. Chỉ bổ sung diễn giải trong tài liệu.
