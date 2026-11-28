@@ -31,7 +31,7 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): không (tr
 
 - **Impact / tháng dự kiến** = 12 người × 3 lần × 1 phút = **36 phút/tháng**. 12 là số phiếu chọn thời gian từ 2 phút trở lên ở câu 3 khảo sát, chỉ dùng làm quy mô kịch bản thử; không phải số người đã dùng sản phẩm. 3 lần/tháng và tiết kiệm 1 phút/lần đều **tự ước tính**. Chưa đo chênh lệch thời gian trước/sau, chưa chứng minh tiền tiết kiệm hoặc giảm mua nhầm.
 - Hướng không chọn và lý do: giữ trong bảng trên; đây là quyết định phạm vi, không phải kết quả thử nghiệm so sánh ba sản phẩm.
-- Persona dự kiến: ít 1 lần/tháng, vừa 4 lần/tháng, nhiều 6 lần/tháng (**tự ước tính**). Nguồn tham khảo câu 1: 8 phiếu mua 1–2 lần, 9 phiếu mua 3–5 lần, 6 phiếu >5 lần, 1 phiếu không mua; tần suất mua chưa đồng nghĩa tần suất dùng công cụ. `cost/personas.yaml` vẫn còn mẫu, cần cập nhật ở CP4.
+- Persona dự kiến: ít 1 lần/tháng, vừa 4 lần/tháng, nhiều 6 lần/tháng (**tự ước tính**). Nguồn tham khảo câu 1: 8 phiếu mua 1–2 lần, 9 phiếu mua 3–5 lần, 6 phiếu >5 lần, 1 phiếu không mua; tần suất mua chưa đồng nghĩa tần suất dùng công cụ. `cost/personas.yaml` cấu hình 50 phiên, một lượt/phiên; share tham khảo 8/23, 9/23, 6/23 trên nhóm có mua. Quy mô thử nghiệm thấp/cơ sở/cao 6/12/24 người là tự ước tính, không phải người dùng đã xác nhận; 12 là kịch bản cơ sở cùng quy mô impact ở trên.
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 - **Baseline đọc review thủ công:** theo khảo sát câu 2–3 và các lời kể trong `evidence/summary.md`. Học: người mua cần xem căn cứ gốc. Tránh: bắt họ tự lọc toàn bộ nội dung. Khác biệt của bản thử: trả nhãn, tỷ lệ tích cực trên review có chi tiết và tối đa 3 trích dẫn. Chưa đo công cụ nhanh hơn baseline.
@@ -110,15 +110,15 @@ flowchart LR
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — **29 câu** (thuong **8** · kho **15** · tu_choi **6**); nguồn `data_that` **19/29**, `tu_viet` **10/29**; 4 metric trong `eval/metric_spec.yaml`: nhan_dung · diem_dung · trich_dan_co_that · khong_vuot_tham_quyen. Giữ 14 câu CP2, bổ sung 15 câu CP3.
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ 80% câu thử qua `pass_criterion`, **và** `nhan_dung` ≥ 85% review, **và** `trich_dan_co_that` = 100% trích dẫn, **và** `khong_vuot_tham_quyen` = 100% câu tu_choi."
-- **Kết quả lượt 1:** **28/29 (96,6%; score làm tròn 97%)**, model `gpt-6-luna`, run ID **run-1@20261128-085253**, 0 lỗi kỹ thuật. Thường 8/8; khó 14/15; từ chối 6/6. Kết quả `eval/run-1.csv`, trace `traces/run-1.jsonl`; chi tiết `eval/report.md`, hồ sơ `eval/README.md`. Lượt 2 **chưa chạy**.
+- **Kết quả:** lượt 1 **28/29 (96,6%)**, run ID **run-1@20261128-085253**; lượt 2 **27/29 (93,1%)**, run ID **run-2@20261128-102256**. Cả hai dùng `gpt-6-luna`, 0 lỗi kỹ thuật. Lượt 2 thường 7/8, khó 14/15, từ chối 6/6; chi tiết `eval/report.md`, `eval/README.md`, các file `eval/run-1.csv`, `eval/run-2.csv` và trace tương ứng. Thử cải tiến làm giảm một câu đạt nên đã đưa prompt đang dùng về bản lượt 1; prompt thử nghiệm giữ tại `eval/prompts/run-2-system.txt`.
 - **Sai khác:** R16 không đạt (3/5 nhãn, điểm 1/4 thay vì 1/3). R07 khác một nhãn nhưng đạt ngưỡng 4/5. R18 khác cảm xúc review 5 so với expected nhưng đạt pass_criterion; không thêm điều kiện loại sau khi xem output.
 - **Cách chấm và giới hạn:** AI hỗ trợ đối chiếu nhãn/điểm, kiểm trích dẫn và đọc hành vi; chỉ điền pass/ghi_chu. 67/67 trích dẫn khớp review sau chuẩn hoá. Chưa có người thứ hai chấm độc lập hoặc tổng hợp đủ bốn metric, nên tỷ lệ tổng ≥80% chưa tự xác nhận toàn bộ chuẩn đạt. Benchmark đã được dùng khi thiết kế prompt, không phải tập kiểm thử độc lập hoàn toàn.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
-- Chi phí / task thành công: __ (model __) · __ (model __)
-- Chi phí / tháng ở quy mô thật: thấp __ · cơ sở __ · cao __ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
+- Persona + giá: `cost/personas.yaml` · lượt **simulate-1@20261128-103718**, `cost/simulate-1.csv`, summary và trace tương ứng. **50/50 phiên, 0 lỗi**, seed 42; ít/vừa/nhiều 18/17/15 phiên, mỗi phiên một lượt; 45 lần gọi model, 30.934 token vào / 17.057 ra.
+- Chi phí/task thành công: **$0,00024** (gpt-6-luna), **$0,0048** (quy đổi giá gpt-6.2-sol trên token Luna, chưa đo Sol thật). Rate **28/29** từ `run-1@20261128-085253`, phù hợp prompt đã khôi phục. Công thức chi phí/phiên chia rate benchmark; chưa chấm riêng 50 output mô phỏng.
+- Chi phí/tháng của kịch bản tự ước tính thấp/cơ sở/cao **6/12/24** người: Luna **$0,0049 / $0,0098 / $0,0197**; Sol quy đổi **$0,0983 / $0,1966 / $0,3933**. Luna cơ sở **$0,00082/người/tháng**. Chi tiết và nguồn giá trong `cost/cost-estimate.md`.
+- So với impact: §2 giả định 3 phút/người/tháng; cơ cấu persona mô phỏng tương đương 3,48 phiên/người/tháng, nếu tiết kiệm 1 phút/phiên thì 3,48 phút (chưa đo). Token rẻ trong kịch bản nhỏ nhưng chưa đủ kết luận hiệu quả thương mại, chưa tính hosting/công người hoặc chứng minh lợi ích thật.
 
 ## §9. Rủi ro & an toàn
 - Dữ liệu: benchmark chứa trích đoạn review và tình huống dựng; file khảo sát cung cấp không có cột tên/email/số điện thoại. Không gửi khảo sát hoặc nguyên dataset vào model; luồng hiện gửi tên sản phẩm và review được dán. Chưa có bộ lọc PII tự động cho đầu vào nên cần người duyệt/ẩn thông tin cá nhân trước khi dùng thật. API key ở .env, không đưa vào repo/video.
@@ -137,6 +137,10 @@ flowchart LR
 | 27/11/2026 — rà soát bản CP2 | Làm rõ 27,2% là tỷ lệ nhãn spam gốc; giữ nguyên số đếm. Làm rõ ưu tiên nhãn khen chung chung kết hợp lời khen dịch vụ chung chung trong prompt | Nhãn gốc lệch định nghĩa của nhóm (ví dụ 4–5 trong evidence/data-mining.md); quy tắc prompt mâu thuẫn với R05. Giữ nguyên benchmark, metric và chuẩn đạt §7 |
 | 28/11/2026 — cập nhật CP3 | Điền §0–§7, cập nhật 29 câu, lượt 1 và data card; impact ghi rõ tự ước tính | Dựa trên benchmark, run-1, khảo sát và code hiện có; không sửa chuẩn đạt, metric, câu thử hoặc kết quả lượt chạy |
 | 28/11/2026 — kiểm tái lập | Ghi mẫu 50 chưa tái lập trên v1; nêu một phiếu khảo sát chọn hậu quả mâu thuẫn | sample50.py lỗi AssertionError; chưa dùng 60% làm số đã kiểm chứng. Giữ nguyên dữ liệu/báo cáo nguồn để nhóm đối chiếu |
+| 28/11/2026 — cải tiến CP4 | Làm rõ thứ tự ưu tiên bốn nhãn trong SYSTEM: chất lượng sử dụng cụ thể, hư hại giao nhận nhẹ, cảm nhận chung chung, dịch vụ. Thêm eval/check_review_boundaries.py với 9 review dựng ngoài benchmark và đáp án ghi trước khi gọi model | Nhóm lỗi R16 làm lệch mẫu số điểm. Bộ phát triển mới đạt 8/9 nhãn trước sửa, 9/9 sau sửa trên gpt-6-luna (mỗi bản chạy một lần); không phải benchmark độc lập hoặc kết quả lượt 2. Không đổi công thức, benchmark, expected, metric hoặc chuẩn đạt |
+| 28/11/2026 — đánh giá và không giữ prompt thử nghiệm | Chạy/chấm lượt 2: 27/29 so với 28/29 lượt 1; lưu prompt tại eval/prompts/run-2-system.txt và khôi phục agent.py về bản lượt 1 | R16 vẫn không đạt, R17 phát sinh lỗi điểm. Giữ nguyên cả hai lượt, chỉ điền pass/ghi_chu cho lượt 2; báo cả cải thiện cục bộ và hồi quy, không kết luận cải tiến thành công |
+| 28/11/2026 — cấu hình mô phỏng chi phí | Thay persona mẫu bằng ba nhóm khảo sát, 50 phiên, tần suất 1/4/6 và một lượt/phiên; quy mô tự ước tính 6/12/24; thêm giá Standard Luna/Sol có nguồn | Chỉ chuẩn bị cấu hình, chưa chạy mô phỏng. Dùng cả ba type để cùng phạm vi benchmark và lấy tỉ lệ đạt từ run-1 cho prompt đang dùng. Giá Sol chỉ quy đổi trên token Luna, chưa chứng minh chất lượng Sol |
+| 28/11/2026 — ghi kết quả chi phí | Đối chiếu simulate-1@20261128-103718: 50 phiên, 0 lỗi; cập nhật §8 và cost/cost-estimate.md | Tái tính từ CSV khớp summary; dùng rate run-1, không dùng lượt thử hoặc rate run-2. Giữ nguyên CSV, summary, trace mô phỏng đã chạy |
 
 **Phần chưa xong CP3:** phòng/zone chưa có trong repo; chưa tái lập mẫu 50 trên đúng v2; chưa xác minh đối thủ; impact chưa đo trước/sau; chưa chấm độc lập và tổng hợp đủ bốn metric. §8 chi phí và lượt 2 làm tiếp cho CP4.
 

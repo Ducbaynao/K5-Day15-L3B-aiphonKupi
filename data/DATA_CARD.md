@@ -65,5 +65,6 @@ Kiểm bằng `python run.py check`. Giữ nguyên metric/chuẩn đạt CP2; kh
 - **Lượt 1:** `eval/run-1.csv`, `traces/run-1.jsonl`; run ID **run-1@20261128-085253**, model OpenAI **gpt-6-luna**.
 - **Quy mô:** 29/29 chạy xong, 0 lỗi kỹ thuật; tổng token API ghi nhận **18.550 vào / 9.075 ra**. Câu xử lý trực tiếp bằng code có thể không gọi model.
 - **Chấm:** AI hỗ trợ đối chiếu dữ liệu và đọc hành vi; **28/29 đạt (96,6%)**, thường 8/8, khó 14/15, từ chối 6/6. Chưa có người thứ hai chấm độc lập. 67/67 trích dẫn khớp nguồn sau chuẩn hoá.
-- **Sai khác:** R16 không đạt; R07 và R18 khác expected nhưng vẫn đạt pass_criterion, đã ghi trong ghi_chu. Chi tiết `eval/report.md`. Chưa có lượt 2 hoặc tổng hợp đủ bốn metric.
+- **Sai khác lượt 1:** R16 không đạt; R07 và R18 khác expected nhưng vẫn đạt pass_criterion, đã ghi trong ghi_chu. Chi tiết `eval/report.md`; chưa tổng hợp đủ bốn metric.
+- **Lượt 2 (CP4):** `run-2@20261128-102256`, model gpt-6-luna, 0 lỗi kỹ thuật; 27/29 đạt (93,1%), R16/R17 không đạt; token 22.681 vào / 9.356 ra. Chỉ điền pass/ghi_chu. Prompt thử nghiệm lưu ở `eval/prompts/run-2-system.txt`; kết quả giảm nên đã khôi phục prompt đang dùng về bản lượt 1. Giữ nguyên cả hai lượt và trace tương ứng.
 - **Bảo toàn:** không sửa input, expected, output, token, run ID hoặc trace đã chạy; chỉ điền pass/ghi_chu. Chạy lại tạo lượt mới. Không lưu key trong kết quả hoặc quay .env trong video.

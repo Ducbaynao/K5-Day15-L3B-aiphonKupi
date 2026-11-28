@@ -9,9 +9,9 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | run-1@20261128-085253 | 28/29 | 96,6% | 8/8 (100%) | 14/15 (93,3%) | 6/6 (100%) | Đạt ngưỡng tổng ≥80%; chưa tổng hợp đủ kết quả từng metric |
-| 2 | Chưa chạy | — | — | — | — | — | Chưa đánh giá |
+| 2 | run-2@20261128-102256 | 27/29 | 93,1% | 7/8 (87,5%) | 14/15 (93,3%) | 6/6 (100%) | Đạt ngưỡng tổng ≥80%; chưa tổng hợp đủ kết quả từng metric |
 
-Kết quả từng câu lượt 1: [run-1.csv](run-1.csv). Trace: [run-1.jsonl](../traces/run-1.jsonl). Model: `gpt-6-luna`; 29/29 câu chạy xong, 0 lỗi kỹ thuật. Lượt 2 chưa chạy.
+Kết quả từng câu: [run-1.csv](run-1.csv), [run-2.csv](run-2.csv). Trace: [run-1.jsonl](../traces/run-1.jsonl), [run-2.jsonl](../traces/run-2.jsonl). Cả hai lượt dùng `gpt-6-luna`, chạy 29/29 câu, 0 lỗi kỹ thuật, cùng benchmark và chuẩn chấm. Prompt thử nghiệm lượt 2 lưu đầy đủ tại [run-2-system.txt](prompts/run-2-system.txt); sau đánh giá đã đưa prompt đang dùng về bản lượt 1 vì kết quả giảm.
 
 Lệnh `python run.py score eval/run-1.csv` làm tròn tỷ lệ tổng thành 97%, nhóm `kho` thành 93%. Bảng trên ghi đến một chữ số thập phân.
 
@@ -37,12 +37,15 @@ Chấm bằng đối chiếu nhãn, điểm và trích dẫn với dữ liệu �
 
 ## 3. Một lần cải tiến
 
-- Nhóm lỗi dự kiến cải tiến: ranh giới chất lượng / đóng gói / khen chung chung. R16 cho thấy nhãn sai làm lệch mẫu số điểm người mua nhìn thấy.
-- Đã sửa gì: chưa thực hiện cải tiến sau lượt 1; dự kiến rà quy tắc chung, không chèn input benchmark vào code và không đổi expected, metric hoặc chuẩn đạt.
-- Kết quả trước cải tiến: 28/29 (96,6%); sau cải tiến chưa có lượt 2, chưa kết luận hiệu quả.
-- Câu nào **tệ đi** sau khi sửa: chưa xác định vì chưa chạy lượt 2.
+- Nhóm lỗi nhắm tới: ranh giới chất lượng / đóng gói / khen chung chung. R16 cho thấy nhãn sai làm lệch mẫu số điểm người mua nhìn thấy.
+- Đã thử: ưu tiên loại sản phẩm khác; phân biệt chi tiết chất lượng sử dụng với hư hại giao nhận nhẹ; tách cảm nhận chung chung khỏi trải nghiệm dịch vụ. Chỉ sửa prompt chung, không so khớp nguyên văn câu thử và không đổi công thức hoặc benchmark.
+- Bộ phát triển ngoài benchmark: 9 review dựng, đáp án ghi sẵn trước khi gọi model, tại `eval/check_review_boundaries.py`. Prompt cũ đạt 8/9 nhãn, prompt thử nghiệm đạt 9/9 (mỗi bản một lần, không phải kết quả kiểm thử độc lập hoặc đánh giá trên người thật).
+- Kết quả chính thức: **28/29 (96,6%) → 27/29 (93,1%)**, giảm 1 câu đạt (3,4 điểm phần trăm, tính từ tỷ lệ chưa làm tròn). **Giả thuyết cải tiến chưa thành công**; không chọn prompt thử nghiệm làm bản đang dùng. Đã khôi phục `agent.py` về prompt trước cải tiến, giữ nguyên lượt 2 và lưu prompt thử nghiệm để tái lập.
+- Nhóm lỗi R16: 0/1 câu đạt → 0/1; review 4 đã đúng `van_chuyen`, nhưng review 1 bị gán `van_chuyen` thay vì `chat_luong`, review 5 vẫn sai. Output trở thành KHÔNG ĐỦ CĂN CỨ thay vì điểm 1/3.
+- Câu **tệ đi về pass**: R17, từ đạt sang không đạt; review 5 bị coi là chất lượng làm điểm 4/5 thay vì 3/4. R01 review 5, R12 review 4 và B14 review 4 cũng phát sinh sai nhãn, nhưng vẫn đạt pass_criterion. R07 sửa được nhãn review 4 (5/5); R18 vẫn khác cảm xúc so với expected nhưng đạt tiêu chí.
+- Kiểm bằng cùng cách chấm: 66/66 trích dẫn lượt 2 khớp review sau chuẩn hoá; không thấy hành vi vượt thẩm quyền trong 6 câu tu_choi. AI hỗ trợ chấm, chưa có người thứ hai chấm độc lập. Không suy rộng từ một lần chạy rằng thay đổi prompt là nguyên nhân duy nhất; model có thể biến thiên giữa các lần.
 
 ## 4. Còn lại
 
-- Lỗi chưa sửa: các sai khác R16, R07, R18 ở trên; nhầm nhãn có thể làm điểm tích cực bị lệch. Chưa có bằng chứng về tác động lên quyết định mua thực tế.
+- Bản đang dùng đã trở về prompt lượt 1, nên các sai khác R16/R07/R18 của lượt 1 vẫn là vấn đề chưa giải quyết. Lượt 2 bổ sung bằng chứng ranh giới nhãn chưa ổn định; nhầm nhãn có thể làm điểm tích cực bị lệch. Chưa có bằng chứng về tác động lên quyết định mua thực tế.
 - Nếu có thêm 1 tuần: thu thêm review chưa dùng để chỉnh prompt và tổ chức chấm độc lập để kiểm độ nhất quán nhãn/cảm xúc.

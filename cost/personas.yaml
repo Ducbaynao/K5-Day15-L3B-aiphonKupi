@@ -1,52 +1,59 @@
-# Mô phỏng chi phí khi dùng thật — điền ở guide bước 4.2.
-# Ôn lại: ngày 13, ngày 1, ngày 14 · lab ngày 13, lab ngày 14.
-# Mọi số phải có nguồn (data / phỏng vấn / khảo sát / quy mô khoá có nguồn) hoặc ghi rõ "(tự ước tính)".
-# Chạy: python run.py simulate --try   (10 phiên, kiểm khung — làm trước CP3)
-#       python run.py simulate         (đủ số phiên dưới đây — bản nộp CP4)
-# Thay mọi dòng "(ví dụ)" bằng số và nguồn của nhóm; simulate nhắc nếu còn sót.
+﻿# Mô phỏng chi phí aiphonKupi — CP4, cập nhật 28/11/2026.
+# Đơn vị giá: USD / 1 triệu token, Standard API, không tính giảm giá cache/Batch/Flex.
+# Chỉ cấu hình ở đây; model thực sự gọi lấy từ .env, hiện dự kiến gpt-6-luna.
+# Chạy chính thức: python run.py simulate --rate-from eval/run-1.csv
+# Dùng rate lượt 1 vì prompt đang dùng đã khôi phục về bản đó.
 
-sessions: 50        # số phiên mô phỏng — bản nộp ≥50
-seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phiên
+sessions: 50
+seed: 42
 
-users:              # số người dùng thật nếu đưa vào dùng — 3 kịch bản, ở quy mô thật của sản phẩm
-                    # track A: khoá học · track B–F: người dùng của sản phẩm / nhóm nhắm tới, nguồn công khai có link
-  low: 300
-  base: 700
-  high: 1000
-  source: "(ví dụ) track A — thay bằng số của nhóm. Cơ sở: lớp L3 hơn 700 học viên (README hackathon); thấp, cao: (tự ước tính)"
+users:
+  low: 6
+  base: 12
+  high: 24
+  source: "(tự ước tính) Ba quy mô thử nghiệm 6/12/24 người dùng hoạt động, chưa phải số người đã dùng hoặc cam kết dùng. Cơ sở 12 tham chiếu spec.md §2: 12/24 phiếu khảo sát mất ít nhất 2 phút lọc review; thấp/cao bằng nửa/gấp đôi cơ sở. Không suy rộng thành quy mô thị trường. Nguồn tham khảo: evidence/survey/results.csv, câu 3."
 
-personas:           # ≥3 kiểu người dùng; share cộng lại = 1
-  - name: dung_it
-    share: 0.5              # tỉ lệ người dùng kiểu này
-    uses_per_month: 4       # số phiên / người / tháng
-    turns_per_session: 1    # số lượt hỏi trong một phiên
-    source: "(ví dụ) phỏng vấn P1, P3 — thay bằng nguồn của nhóm"
-  - name: dung_vua
-    share: 0.3
-    uses_per_month: 10
-    turns_per_session: 3
-    source: "(ví dụ) khảo sát n = 24, câu 3"
-  - name: dung_nhieu
-    share: 0.2
-    uses_per_month: 20
-    turns_per_session: 5
-    source: "(ví dụ) data/preclass: đếm số lượt / người — cách đếm ở evidence/data-mining.md"
-# Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
-# Persona hỏi kiểu riêng: thêm vào persona đó
-#     types: [thuong, kho, tu_choi]
-# hoặc
-#     inputs: ["câu hỏi kiểu 1", "câu hỏi kiểu 2"]
+# Tỉ trọng tham khảo 23/24 phiếu có mua đơn >=200k/tháng: ít 8/23, vừa 9/23, nhiều 6/23.
+# Loại 1 phiếu không mua khỏi mẫu số tỉ trọng; chưa chứng minh người mua sẽ dùng công cụ.
+# Dùng 1/4/6 phiên/tháng khớp các persona dự kiến ở spec.md §2.
+# Một phiên = một lần dán một bộ review, một lượt độc lập; chưa đo hành vi hỏi bổ sung.
+# Lấy đều từ cả 29 câu (kể cả tu_choi) để cùng phạm vi với tỉ lệ đạt 28/29 lượt 1.
+# Đây là hỗn hợp để đo chi phí benchmark, không phải tỉ lệ loại câu ngoài đời đã đo.
+personas:
+  - name: nguoi_mua_it
+    share: 0.34782609
+    uses_per_month: 1
+    turns_per_session: 1
+    types: [thuong, kho, tu_choi]
+    source: "Khảo sát evidence/survey/results.csv câu 1: 8/23 người có mua thuộc nhóm 1–2 lần/tháng. (tự ước tính) Dùng công cụ 1 phiên/tháng, 1 lượt/phiên; dùng tỉ trọng mua hàng làm đại diện ban đầu, chưa đo mức chấp nhận sản phẩm."
+  - name: nguoi_mua_vua
+    share: 0.39130435
+    uses_per_month: 4
+    turns_per_session: 1
+    types: [thuong, kho, tu_choi]
+    source: "Khảo sát evidence/survey/results.csv câu 1: 9/23 người có mua thuộc nhóm 3–5 lần/tháng. (tự ước tính) Dùng công cụ 4 phiên/tháng (giữa khoảng), 1 lượt/phiên; tần suất mua không đồng nghĩa tần suất sử dụng công cụ."
+  - name: nguoi_mua_nhieu
+    share: 0.26086956
+    uses_per_month: 6
+    turns_per_session: 1
+    types: [thuong, kho, tu_choi]
+    source: "Khảo sát evidence/survey/results.csv câu 1: 6/23 người có mua chọn trên 5 lần/tháng (nhãn CSV có hậu tố tháng3, đọc theo nhóm trên 5, không sửa nguồn). (tự ước tính) Dùng công cụ 6 phiên/tháng, 1 lượt/phiên; lấy mức nguyên nhỏ nhất trên 5, chưa biết trung bình thật."
 
-prices:             # USD / 1 triệu token — chép từ further-reading/model-prices.md của repo đề. ≥2 mức model
-  - model: gemini-3.1-flash-lite
-    input: 0.25
-    output: 1.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
-  - model: gemini-4-hydrogen
-    input: 1.50
-    output: 7.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+# Khung đo token bằng model trong .env rồi áp bảng giá dưới đây.
+# Chi phí gpt-6.2-sol là quy đổi theo cùng lượng token đo trên Luna, KHÔNG phải chạy Sol thật.
+# Tỉ lệ đạt của Luna không chứng minh độ chính xác của Sol; cần đánh giá riêng nếu đổi model.
+# Chưa tính hosting, lưu trữ, thu thập dữ liệu, công người, thuế hoặc chênh lệch cache.
+prices:
+  - model: gpt-6-luna
+    input: 0.10
+    output: 0.50
+    source: "OpenAI, Standard text tokens USD/1M: https://developers.openai.com/api/docs/models/gpt-6-luna · kiểm tra 28/11/2026. Giá input chưa cache; output gồm token đầu ra được API ghi nhận."
+  - model: gpt-6.2-sol
+    input: 2.00
+    output: 10.00
+    source: "OpenAI, Standard text tokens USD/1M: https://developers.openai.com/api/docs/models/gpt-6.2-sol · kiểm tra 28/11/2026. Chỉ là kịch bản quy đổi giá, chưa đo token hoặc chất lượng trên Sol."
 
-usd_to_vnd:         # tuỳ chọn: điền thì bản tóm tắt in thêm tiền Việt
+# Chỉ báo USD; chưa có nguồn tỉ giá nên không tự gán USD/VND.
+usd_to_vnd:
   rate:
-  source:
+  source: "Chưa quy đổi VND; cần nguồn tỉ giá và ngày kiểm tra nếu bổ sung."
