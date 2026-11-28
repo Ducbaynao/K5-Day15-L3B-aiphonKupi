@@ -1,7 +1,7 @@
 # AI SPEC — Lọc review có thông tin chất lượng · Nhóm aiphonKupi · Lớp L3B
 
 > Mốc nộp: §7 chốt chuẩn "đạt" tại **CP2 19:30 Thứ Sáu 27/11** · §0–§7 nộp **CP3 10:00 Thứ Bảy 28/11** · đủ §0–§10 **CP4 14:30 Thứ Bảy 28/11** · §10 changelog ghi tiếp đến **23:59 Thứ Bảy 28/11**.
-> Bản cập nhật CP3 ngày 28/11/2026. Phòng/zone demo và link video chưa được cung cấp trong repo. Những phần chưa đo hoặc chưa kiểm chứng được ghi rõ bên dưới.
+> Bản cập nhật CP3 ngày 28/11/2026. Phòng/zone demo chưa được cung cấp trong repo. Video demo 30s gọi AI thật: https://drive.google.com/file/d/1KCGPlLt4TG-tMmBimEn-FajPrdM64ZPk/view?usp=sharing. Những phần chưa đo hoặc chưa kiểm chứng được ghi rõ bên dưới.
 
 Track: [ ] A · [ ] B · [ ] C · [x] D · [ ] E — bài toán: nhóm tự mở rộng trong bối cảnh sàn mua sắm — tách review có thông tin về chất lượng sản phẩm khỏi review vô nghĩa / chỉ nói vận chuyển / của sản phẩm khác
 Data BTC cấp đã dùng (nếu có — không commit nguyên file): không (track D không cấp data). Data ngoài: ViSpamReviews v1 (arXiv 2207.14636), không commit — xem `data/DATA_CARD.md`
@@ -81,7 +81,7 @@ flowchart LR
   | Việc tính toán để code làm, không để AI làm | `compute_score`, `find_duplicates` chạy bằng code; AI chỉ gán nhãn |
   | Nói rõ giới hạn khi bị đòi ngoài phạm vi | Bước kiểm phạm vi ở đầu luồng: từ chối kết luận lừa đảo / lộ thông tin cá nhân / khuyên mua, chỉ kênh đúng |
 
-- **Phần thật / dựng / chưa làm:** lượt 1 gọi OpenAI `gpt-6-luna` thật, token đo từ API: 18.550 vào / 9.075 ra cho cả lượt (nguồn `eval/run-1.csv`). `fake` chỉ là chế độ thử luồng, không phải model của lượt này. Benchmark có 19/29 câu `data_that`, 10/29 câu `tu_viet`; một số tình huống dựng dùng lại review thật. Không có scraper, dữ liệu giao dịch sàn hoặc ảnh/video đầu vào; giao diện hiện là dòng lệnh. Chưa có link video demo trong repo.
+- **Phần thật / dựng / chưa làm:** lượt 1 gọi OpenAI `gpt-6-luna` thật, token đo từ API: 18.550 vào / 9.075 ra cho cả lượt (nguồn `eval/run-1.csv`). `fake` chỉ là chế độ thử luồng, không phải model của lượt này. Benchmark có 19/29 câu `data_that`, 10/29 câu `tu_viet`; một số tình huống dựng dùng lại review thật. Không có scraper, dữ liệu giao dịch sàn hoặc ảnh/video đầu vào; giao diện hiện là dòng lệnh. Video demo 30s: https://drive.google.com/file/d/1KCGPlLt4TG-tMmBimEn-FajPrdM64ZPk/view?usp=sharing.
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
@@ -138,7 +138,7 @@ flowchart LR
 | 28/11/2026 — cập nhật CP3 | Điền §0–§7, cập nhật 29 câu, lượt 1 và data card; impact ghi rõ tự ước tính | Dựa trên benchmark, run-1, khảo sát và code hiện có; không sửa chuẩn đạt, metric, câu thử hoặc kết quả lượt chạy |
 | 28/11/2026 — kiểm tái lập | Ghi mẫu 50 chưa tái lập trên v1; nêu một phiếu khảo sát chọn hậu quả mâu thuẫn | sample50.py lỗi AssertionError; chưa dùng 60% làm số đã kiểm chứng. Giữ nguyên dữ liệu/báo cáo nguồn để nhóm đối chiếu |
 
-**Phần chưa xong CP3:** link video và phòng/zone chưa có trong repo; chưa tái lập mẫu 50 trên đúng v2; chưa xác minh đối thủ; impact chưa đo trước/sau; chưa chấm độc lập và tổng hợp đủ bốn metric. §8 chi phí và lượt 2 làm tiếp cho CP4.
+**Phần chưa xong CP3:** phòng/zone chưa có trong repo; chưa tái lập mẫu 50 trên đúng v2; chưa xác minh đối thủ; impact chưa đo trước/sau; chưa chấm độc lập và tổng hợp đủ bốn metric. §8 chi phí và lượt 2 làm tiếp cho CP4.
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
