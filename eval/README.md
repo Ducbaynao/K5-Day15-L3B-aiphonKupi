@@ -34,11 +34,13 @@ Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
 
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
-| 1 | | | | __/__ | | |
-| 2 | | | | __/__ | | |
+| 1 | run-1@20261128-085253 | gpt-6-luna | Workflow lọc review; cấu hình đã dùng được ghi trong traces/run-1.jsonl; 29 câu, 0 lỗi kỹ thuật | 28/29 | 96,6% (score làm tròn 97%) | Đạt ngưỡng tổng ≥80%; chưa tổng hợp đủ kết quả từng metric |
+| 2 | Chưa chạy | — | Chưa thực hiện cải tiến sau lượt 1 | — | — | Chưa đánh giá |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
 ## 6. Lỗi chính
 
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+- Lượt 1: thường 8/8 (100%), khó 14/15 (93,3%), từ chối 6/6 (100%). Chỉ R16 không đạt: đúng 3/5 nhãn và điểm 1/4 thay vì 1/3.
+- R07 sai một nhãn nhưng vẫn đạt ngưỡng 4/5; R18 khác cảm xúc review 5 so với expected nhưng vẫn đạt pass_criterion. Chi tiết: [report.md](report.md), cột `ghi_chu` trong [run-1.csv](run-1.csv).
+- Chưa cải tiến hoặc chạy lượt 2. AI hỗ trợ chấm lượt 1 bằng đối chiếu dữ liệu và đọc hành vi; chưa có kết quả người thứ hai chấm độc lập. Không thay đổi output, expected, metric hoặc chuẩn đạt.
